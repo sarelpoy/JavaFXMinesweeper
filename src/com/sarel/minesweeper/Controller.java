@@ -23,6 +23,7 @@ public class Controller {
         boolean revealed=false;
         int row;
         int column;
+
         GamePiece(int column,int row){
             this.row=row;
             this.column=column;
@@ -30,14 +31,13 @@ public class Controller {
                 @Override
                 public void handle(ActionEvent event) {
                     setRevealed();
-                    if (isGameEnd()) {
-                        gameEnd(true);
-                    }else if(isMine){
+                    if (isMine) {
                         gameEnd(false);
+                    }else if(isGameEnd()){
+                        gameEnd(true);
                     }
                 }
             });
-
         }
         void setRevealed(){
             if(!isMine) {
@@ -51,6 +51,7 @@ public class Controller {
                 }
             }else {
                 setStyle("-fx-background-color:red;");
+                revealed=true;
             }
         }
         void revealedNeighbors(){
@@ -58,8 +59,8 @@ public class Controller {
                 for(int j=row-1;j<=row+1;j++){
                     if(!(i==column&&j==row)){
                         GamePiece gamePiece=getNeighbor(i,j);
-                        if(gamePiece!=null){
-                            gamePiece.fire();
+                        if(gamePiece!=null&&!gamePiece.revealed){
+                            gamePiece.setRevealed();
                         }
                     }
                 }
@@ -116,7 +117,7 @@ public class Controller {
         resetBoard();
     }
     public void resetBoard(){
-        boardMatrix = new  GamePiece[width][height];
+        boardMatrix = new GamePiece[width][height];
         board.getChildren().clear();
         for (int i=0;i<width;i++){
             for (int j=0;j<height;j++){
@@ -142,12 +143,10 @@ public class Controller {
     }
     public GamePiece getNeighbor(int column,int row){
         GamePiece neighbor = null;
-
         if((row<0||column<0)||(row>=height||column>=width)){
             return null;
         }
         neighbor = boardMatrix[column][row];
-
         return neighbor;
     }
 }
