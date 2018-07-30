@@ -29,19 +29,7 @@ public class Controller {
             setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-
-                    if(!isMine) {
-                        int numberOfMinesNeighbors =getNumberOfMinesNeighbors(column,row);
-                        setText(String.valueOf(numberOfMinesNeighbors));
-                        if(numberOfMinesNeighbors==0&&!revealed){
-                            revealed=true;
-                            revealedNeighbors();
-                        }else {
-                            revealed=true;
-                        }
-                    }else {
-                        setStyle("-fx-background-color:red;");
-                    }
+                    setRevealed();
                     if (isGameEnd()) {
                         gameEnd(true);
                     }else if(isMine){
@@ -50,6 +38,20 @@ public class Controller {
                 }
             });
 
+        }
+        void setRevealed(){
+            if(!isMine) {
+                int numberOfMinesNeighbors =getNumberOfMinesNeighbors(column,row);
+                setText(String.valueOf(numberOfMinesNeighbors));
+                if(numberOfMinesNeighbors==0&&!revealed){
+                    revealed=true;
+                    revealedNeighbors();
+                }else {
+                    revealed=true;
+                }
+            }else {
+                setStyle("-fx-background-color:red;");
+            }
         }
         void revealedNeighbors(){
             for(int i=column-1;i<=column+1;i++){
@@ -61,6 +63,16 @@ public class Controller {
                         }
                     }
                 }
+            }
+        }
+
+    }
+    public void revealedAll() {
+        for(int i=0;i<width;i++){
+            for(int j=0;j<height;j++){
+               if(!boardMatrix[i][j].revealed){
+                   boardMatrix[i][j].setRevealed();
+               }
             }
         }
     }
@@ -90,6 +102,7 @@ public class Controller {
         return end;
     }
     public void gameEnd(boolean success){
+        revealedAll();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("GameOver");
         if(success){
