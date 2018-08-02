@@ -6,7 +6,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -50,9 +52,12 @@ public class Controller {
                     if(event.getButton()== MouseButton.SECONDARY){
                         if(!revealed){
                             if(!isBlock){
+                                System.out.println(getStyle());
                                 setText("!");
+                                setStyle("-fx-background-color:yellow;");
                             }else {
                                 setText("");
+                                setStyle("");
                             }
                             isBlock=!isBlock;
                         }
