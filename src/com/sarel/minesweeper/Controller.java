@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.util.Random;
@@ -24,17 +26,39 @@ public class Controller {
         int row;
         int column;
 
+        boolean isBlock=false;
+
         GamePiece(int column,int row){
             this.row=row;
             this.column=column;
             setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    setRevealed();
-                    if (isMine) {
-                        gameEnd(false);
-                    }else if(isGameEnd()){
-                        gameEnd(true);
+                    if(!isBlock){
+                        setRevealed();
+                        if (isMine) {
+                            gameEnd(false);
+                        }else if(isGameEnd()){
+                            gameEnd(true);
+                        }
+                    }
+                }
+            });
+            setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if(event.getButton()== MouseButton.SECONDARY){
+                        if(!revealed){
+                            if(!isBlock){
+                                setText("!");
+                            }else {
+                                setText("");
+                            }
+                            isBlock=!isBlock;
+                        }
+
+                    }else {
+
                     }
                 }
             });
